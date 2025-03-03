@@ -1,21 +1,25 @@
-import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useContext, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import axios from 'axios'
+import { CaptainDataContext } from '../context/CaptainContext'
 
 const CaptainSignup = () => {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [captainData, setCaptainData] = useState({});
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [vehicle, setVehicle] = useState({
     color: '', plate: '', capacity: '', type: ''
   })
 
+    const { captain, setCaptain } = useContext(CaptainDataContext);
+    const navigate = useNavigate();
 
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
-    setCaptainData({
+
+    const captainData = {
       fullName: {
         firstName : firstName,
         lastName: lastName
@@ -28,18 +32,22 @@ const CaptainSignup = () => {
         capacity: vehicle.capacity,
         type: vehicle.type
       }
-    });
-    // fetch
+    };    
+    
+    const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/captains/register`, captainData);
+    if(res.status === 201) {
+      const data = res.data;
+      setCaptain(data.captain);
+      localStorage.setItem('captain-token', data.token);
+      navigate('/home');
+    }
+
     setEmail('');
     setPassword('');
     setFirstName('');
     setLastName('');
     setVehicle({color: '', plate: '', capacity: '', type :''});
   }
-
-  useEffect(() => {
-    console.log(captainData);
-  }, [captainData]);
   
   return (
     <div className='px-7 pb-7 h-screen flex flex-col justify-between'>
@@ -108,7 +116,7 @@ const CaptainSignup = () => {
             <select required value={vehicle.type}
             className='bg-[#eeeeee] rounded px-4 mb-3 py-2 border-2 w-[45%] focus:border-[#d4b60f] focus:border-[3px] text-sm'
             name="type" onChange={(e)=>setVehicle({...vehicle, type: e.target.value})}>
-              <option value="">-- Vehicle Type --</option>
+              <option value="" disabled>-- Vehicle Type --</option>
               <option value="car">car</option>
               <option value="bike">bike</option>
               <option value="auto">auto</option>
