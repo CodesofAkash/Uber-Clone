@@ -39,7 +39,7 @@ const CaptainSignup = () => {
       const data = res.data;
       setCaptain(data.captain);
       localStorage.setItem('captain-token', data.token);
-      navigate('/home');
+      navigate('/captain/home');
     }
 
     setEmail('');

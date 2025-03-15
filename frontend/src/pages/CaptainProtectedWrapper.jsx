@@ -38,7 +38,7 @@ const CaptainProtectedWrapper = ({ children }) => {
 
     return (
         <>
-            {children}
+            {children }
         </>
     );
 };

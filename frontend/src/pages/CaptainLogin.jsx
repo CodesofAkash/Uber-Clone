@@ -60,7 +60,7 @@ const CaptainLogin = () => {
           <button
           className='bg-[#111] text-white font-semibold mb-3 rounded px-4 py-2 w-full text-lg placeholder:text-base'
           >LogIn</button>
-          <p className='text-center'>Join a fleet? <Link to='/captain-signup' className='text-blue-600 hover:underline'>Register as a Captain</Link>
+          <p className='text-center'>Join a fleet? <Link to='/captain/signup' className='text-blue-600 hover:underline'>Register as a Captain</Link>
           </p>
         </form>
       </div>

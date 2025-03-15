@@ -1,17 +1,34 @@
-import React, { useContext } from 'react'
-import { UserDataContext } from '../context/UserContext'
+import React, { useContext, useEffect, useState } from 'react'
+import { CaptainDataContext } from '../context/CaptainContext'
 
-const CaptainHome = () => {
+const UserHome = () => {
+  
+  const { captain, setCaptain } = useContext(CaptainDataContext);
+  const [isLoading, setIsLoading] = useState(true)
+  
+  useEffect(()=> {
+    if(captain) {
+      console.log(captain);
+      setIsLoading(false);
+    }
+  }, [captain])
 
-    const { captain, setCaptain } = useContext(UserDataContext);
+  if(isLoading) {
+    return <div>Loading...</div>
+  }
 
   return (
     <div>
-      User name = {captain.fullName.firstName + " " + captain.fullName.lastName} | 
-      email = {captain.email} | 
-      password = {captain.password}
-    </div>
+    <h2>Welcome, {captain.fullName.firstName} {captain.fullName.lastName}!</h2>
+    <p>Email: {captain.email}</p>
+    <button onClick={() => setCaptain(prev => ({
+      ...prev, 
+      fullName: { firstName: 'Tony', lastName: 'Stark' }
+    }))}>
+      Update Name
+    </button>
+  </div>
   )
 }
 
-export default CaptainHome
+export default UserHome
