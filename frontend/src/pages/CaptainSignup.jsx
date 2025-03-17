@@ -53,7 +53,7 @@ const CaptainSignup = () => {
     <div className='px-7 pb-7 h-screen flex flex-col justify-between'>
       <div>
       <Link to='/'>
-        <img className='w-20 mt-3 mb-2 ml-4' src="/uber-driver.svg" alt="uber" />
+        <img className='w-20 mb-2 ml-4' src="/uber-driver.svg" alt="uber" />
       </Link>
       <form onSubmit={(e) => {
           submitHandler(e);

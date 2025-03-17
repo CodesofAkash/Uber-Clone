@@ -1,6 +1,7 @@
 import React, { useState, useRef} from 'react'
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
+import { Link } from 'react-router-dom'
 
 import LocationSearchPanel from '../components/LocationSearchPanel'
 import VehiclePanel from '../components/VehiclePanel'
@@ -23,6 +24,8 @@ const UserHome = () => {
   const confirmRideRef = useRef();
   const vehicleFoundRef = useRef();
   const driverFoundRef = useRef();
+  const homeRef = useRef();
+  const logoutRef = useRef();
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -39,6 +42,16 @@ const UserHome = () => {
       gsap.to(panelCloseRef.current, {
         opacity: 1,
         ease: 'power1.inOut'
+      });
+      gsap.to(homeRef.current, {
+        display: 'none',
+        ease: 'bounce.out',
+        duration: 0
+      }),
+      gsap.to(logoutRef.current, {
+        display: 'none',
+        ease: 'bounce.out',
+        duration: 0
       })
     } else {
       gsap.to(locationPanelRef.current, {
@@ -49,6 +62,16 @@ const UserHome = () => {
       gsap.to(panelCloseRef.current, {
         opacity: 0,
         ease: 'power1.inOut'
+      });
+      gsap.to(homeRef.current, {
+        display: 'block',
+        ease: 'back.in',
+        duration: 0
+      }),
+      gsap.to(logoutRef.current, {
+        display: 'block',
+        ease: 'back.in',
+        duration: 0
       })
     }
   }, [panelOpen]);
@@ -119,7 +142,10 @@ const UserHome = () => {
 
   return (
     <div className='h-screen relative overflow-hidden'>
-      <img className='w-28 absolute left-5 top-5' src="/uber.png" alt="uber" />
+      <Link to={'/'}><img ref={homeRef} className='w-28 absolute left-1 top-1 z-10' src="/uber.png" alt="uber" /></Link>
+      <Link to='/login' className='bg-white h-fit w-fit p-2 rounded-xl flex justify-center items-center absolute z-10 top-5 right-3'>
+        <img ref={logoutRef} className='w-7' src="/logout.png" alt="uber" />
+      </Link>
 
       <div onClick={()=>setVehiclePanel(false)} className='h-screen w-screen'>
         {/* img for temporary use */}

@@ -7,12 +7,14 @@ import UserSignup from './pages/UserSignup'
 import UserLogin from './pages/UserLogin'
 import UserLogout from './pages/UserLogout'
 import UserHome from './pages/UserHome'
+import Riding from './pages/Riding'
 import UserProtectedWrapper from './pages/UserProtectedWrapper'
 
 import CaptainSignup from './pages/CaptainSignup'
 import CaptainLogin from './pages/CaptainLogin'
 import CaptainLogout from './pages/CaptainLogout'
 import CaptainHome from './pages/CaptainHome'
+import CaptainRiding from './pages/CaptainRiding'
 import CaptainProtectedWrapper from './pages//CaptainProtectedWrapper'
 
 const App = () => {
@@ -34,6 +36,11 @@ const App = () => {
             <UserHome />
           </UserProtectedWrapper>
         } />
+        <Route path='/riding' element={
+          <UserProtectedWrapper >
+            <Riding />
+          </UserProtectedWrapper>
+        } />
 
         <Route path='/captain/login' element={<CaptainLogin />} />
         <Route path='/captain/signup' element={<CaptainSignup />} />
@@ -45,6 +52,11 @@ const App = () => {
         <Route path='/captain/home' element={
           <CaptainProtectedWrapper>
             <CaptainHome />
+          </CaptainProtectedWrapper>
+        } />
+        <Route path='/captain/riding' element={
+          <CaptainProtectedWrapper>
+            <CaptainRiding />
           </CaptainProtectedWrapper>
         } />
 

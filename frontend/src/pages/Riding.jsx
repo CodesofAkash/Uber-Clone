@@ -1,16 +1,18 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-const WaitingForDriver = (props) => {
+const Riding = () => {
   return (
-    <div className='w-full h-full'>
-      <div className='justify-between items-center flex w-full h-fit border-b-2 border-gray-300 pb-4 '>
-        <div className='font-semibold text-[20px]'> Meet at the pickup point</div>
-        <div onClick={()=>props.setDriverFound(false)} className='px-5 py-3 font-bold bg-black text-white text-xl flex flex-col justify-around items-center'><span>2</span><span>min</span></div>
-      </div>
+    <div className='h-screen'>
+        <img className='h-[40%] w-full object-cover' src="https://miro.medium.com/v2/resize:fit:1400/0*gwMx05pqII5hbfmX.gif" alt="" />
+        <Link to={'/'}><img className='w-28 absolute top-1 left-1 z-10' src="/uber.png" alt="uber" /></Link>
+        <Link to='/user/home' className='bg-white h-fit w-fit p-2 rounded-xl flex justify-center items-center absolute top-5 right-3'>
+            <img src="/home.png" alt="home" className='w-7' />
+        </Link>
+        <div className='p-2 w-full h-[60%]'>
       <div>
         <div className='flex justify-between items-center'>
-          <Link to={"/riding"}> <img src="/car.png" alt="car" className='w-36' /> </Link>
+          <img src="/car.png" alt="car" className='w-36' />
           <div className='flex flex-col items-end justify-start'>
             <p className='text-sm text-gray-600'>Akash Sharma</p>
             <p className='font-bold'>JK06B7655</p>
@@ -49,10 +51,12 @@ const WaitingForDriver = (props) => {
                 <p className='text-sm text-gray-600'>Cash Cash</p>
             </div>
           </div>
+          <button className='bg-[#10b461] mt-5 flex items-center justify-center text-white font-semibold mb-5 rounded px-4 py-2 w-full text-lg placeholder:text-base'>Make a Payment</button>
         </div>
       </div>
+        </div>
     </div>
   )
 }
 
-export default WaitingForDriver
+export default Riding
