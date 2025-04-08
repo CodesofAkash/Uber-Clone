@@ -1,13 +1,36 @@
 import React, { useState, useRef } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import FinishRide from '../components/FinishRide';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
+import axios from 'axios';
+import LiveTracking from '../components/LiveTracking';
 
 const CaptainRiding = () => {
 
     const [finishedRiding, setFinishedRiding] = useState(false);
     const finishedRidingRef = useRef();
+    const location = useLocation();
+    const [ride, setRide] = useState(location.state?.ride || null);
+
+    const navigate = useNavigate();
+
+    const completeRide = async () => {
+      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/rides/complete`, {
+        rideId: ride._id
+      }, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('captain-token')}`
+        }
+      });
+
+      if(response.status === 200) {
+        setRide(response.data.ride);
+        navigate('/captain/home');
+      } else {
+        console.log('Error completing ride:', response.data);
+      }
+    }
 
     useGSAP(()=> {
         if(finishedRiding) {
@@ -32,8 +55,8 @@ const CaptainRiding = () => {
         <img className='w-5' src="/home.png" alt="uber" />
       </Link>
 
-      <div className='h-screen w-screen'>
-        <img className='h-full w-full object-cover' src="https://miro.medium.com/v2/resize:fit:1400/0*gwMx05pqII5hbfmX.gif" alt="" />
+      <div className='h-screen w-screen top-0 fixed z-[-1]'>
+        <LiveTracking />
       </div>
       <div className='bg-yellow-400 p-4 flex flex-col justify-start fixed bottom-0 w-screen'>
         <div className='w-screen h-fit object-center flex justify-center items-center'>
@@ -41,12 +64,12 @@ const CaptainRiding = () => {
         </div>
         <div className='flex justify-around items-center mt-5'>
             <h4 className='font-semibold text-xl'>4 KM away</h4>
-            <button className='w-[50%] bg-green-600 text-white font-semibold p-3 rounded-lg active:scale-95 transition-transform duration-150 ease-in-out'>Complete Ride</button>
+              <button onClick={completeRide} className='w-[50%] bg-green-600 text-white font-semibold p-3 rounded-lg active:scale-95 transition-transform duration-150 ease-in-out'>Complete Ride</button>
         </div>
-        </div>
-        <div ref={finishedRidingRef} className='bg-white p-4 h-fit w-screen fixed z-10 bottom-0 translate-y-full hidden flex-col justify-start items-start gap-3'>
-            <FinishRide setFinishedRiding={setFinishedRiding} />
-        </div>
+      </div>
+      <div ref={finishedRidingRef} className='bg-white p-4 h-fit w-screen fixed z-10 bottom-0 translate-y-full hidden flex-col justify-start items-start gap-3'>
+          <FinishRide setFinishedRiding={setFinishedRiding} completeRide = {completeRide} ride = {ride} />
+      </div>
     </div>
   )
 }

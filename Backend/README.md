@@ -202,3 +202,29 @@ Logs out the authenticated captain by invalidating their token.
 ### Example Response
 
 - `message` (string): Confirmation message indicating successful logout.
+
+## `/rides/get-fare` Endpoint
+
+### Description
+
+Calculates the fare for a ride based on the pickup and destination locations.
+
+### HTTP Method
+
+`GET`
+
+### Query Parameters
+
+- `pickup` (string, required): The pickup location address.
+- `destination` (string, required): The destination location address.
+
+### Headers
+
+- `Authorization` (string, required): Bearer token for authentication.
+
+### Example Request
+
+```http
+GET /rides/get-fare?pickup=562/11-A&destination=Kankariya%20Talab HTTP/1.1
+Host: localhost:3000
+Authorization: Bearer <your-token>

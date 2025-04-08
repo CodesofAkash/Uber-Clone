@@ -1,13 +1,17 @@
-import React from 'react'
+import React, { useContext, useEffect} from 'react'
+import { CaptainDataContext } from '../context/CaptainContext'
 
-const CaptainDetails = (props) => {
+const CaptainDetails = () => {
+
+  const {captain, setCaptain} = useContext(CaptainDataContext);    
+
   return (
     <div className='w-full'>
         <div className='flex justify-between items-center'>
             <div className='flex justify-start gap-2 items-center'>
-                <img onClick={()=>props.setRidePopup(true)} src="/people.jpeg" alt="user" className='size-10 rounded-full object-cover' />
+                <img src="/people.jpeg" alt="user" className='size-10 rounded-full object-cover' />
               <div>
-                <h4 className='font-medium text-lg'>Harsh Patel</h4>
+                <h4 className='font-medium text-lg capitalize'>{captain.fullName.firstName + " " + captain.fullName.lastName}</h4>
                 <p className='font-light text-sm text-gray-600'>Basic Level</p>
               </div>
             </div>

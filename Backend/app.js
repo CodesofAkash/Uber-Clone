@@ -8,6 +8,8 @@ const connectToDb = require('./db/db');
 
 const userRoutes = require('./routes/user.route');
 const captainRoutes = require('./routes/captain.route');
+const mapRoutes = require('./routes/maps.routes');
+const rideRoutes = require('./routes/ride.routes');
 
 
 connectToDb();
@@ -23,6 +25,8 @@ app.use(cookieParser());
 
 app.use('/users', userRoutes);
 app.use('/captains', captainRoutes);
+app.use('/maps', mapRoutes);
+app.use('/rides', rideRoutes);
 
 app.get('/', (req, res) => {
     res.send("Hello World!");

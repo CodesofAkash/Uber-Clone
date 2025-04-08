@@ -1,17 +1,15 @@
 import React from 'react'
 
 const VehiclePanel = (props) => {
+
+  if(props.fare !== '')
   return (
-    <div>
+    <div className='w-full'>
       <div className='p-1 bg-gray-100 w-full flex justify-center items-center'><img onClick={()=>props.setVehiclePanel(false)} src="/down.png" className='w-6' alt="down" /></div>
-        <div className='flex m-2 items-center justify-between p-2 w-[45%] bg-[#eee] rounded-2xl'>
-            <img src="/time.png" className='w-4 h-4' alt="clock" />
-            <span>Leave Now</span>
-            <img src="/down.png" className='w-4 h-4' alt="down" />
-        </div>
         <div onClick={()=> {
             props.setConfirmRide(true);
             props.setVehiclePanel(false);
+            props.setVehicle('car');
         }}
         className='h-full w-full flex justify-between items-center p-2 active:border-3 rounded-2xl'>
           <img src="/car.png" className='w-20' alt="car" />
@@ -21,12 +19,13 @@ const VehiclePanel = (props) => {
             <span className='text-sm leading-5 w-full font-light'>Affordable, compact rides</span>
           </div>
           <span className='h-15 flex justify-center items-baseline'>
-            <span className='font-medium'>Rs. 193.20</span>
+            <span className='font-medium'>₹ {props.fare.fare.car}</span>
           </span>
         </div>
         <div onClick={()=> {
             props.setConfirmRide(true);
             props.setVehiclePanel(false);
+            props.setVehicle('moto');
         }}
         className='h-full w-full flex justify-between items-center p-2 active:border-3 rounded-2xl'>
           <img src="/bike.webp" className='w-20' alt="car" />
@@ -36,12 +35,13 @@ const VehiclePanel = (props) => {
             <span className='text-sm leading-5 w-full font-light'>Affordable motorcycle rides</span>
           </div>
           <span className='h-15 flex justify-center items-baseline'>
-            <span className='font-medium'>Rs. 65.17</span>
+            <span className='font-medium'>₹ { props.fare.fare.moto }</span>
           </span>
         </div>
         <div onClick={()=> {
             props.setConfirmRide(true);
             props.setVehiclePanel(false);
+            props.setVehicle('auto');
         }}
         className='h-full w-full flex justify-between items-center p-2 active:border-3 rounded-2xl'>
           <img src="/auto.png" className='w-20' alt="car" />
@@ -51,11 +51,18 @@ const VehiclePanel = (props) => {
             <span className='text-sm leading-5 w-full font-light'>Affordable, auto rikshaw rides</span>
           </div>
           <span className='h-15 flex justify-center items-baseline'>
-            <span className='font-medium'>Rs. 118.21</span>
+            <span className='font-medium'>₹ { props.fare.fare.auto }</span>
           </span>
         </div>
     </div>
   )
+  else {
+    return (
+      <div className='h-full w-full flex justify-center items-center'>
+        Loading...
+      </div>
+    )
+  }
 }
 
 export default VehiclePanel
