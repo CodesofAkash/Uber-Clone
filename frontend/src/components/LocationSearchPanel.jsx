@@ -1,6 +1,7 @@
 import React from 'react'
 import 'remixicon/fonts/remixicon.css'
 import axios from 'axios'
+import toast from 'react-hot-toast'
 
 const LocationSearchPanel = ({ suggestions, setVehiclePanel, setPanelOpen, setPickup, pickup, setDestination, destination, activeField, setFare }) => {
 
@@ -13,16 +14,26 @@ const LocationSearchPanel = ({ suggestions, setVehiclePanel, setPanelOpen, setPi
     }
 
     const findTrip = async () => {
-        const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/rides/get-fare`, {
-            params: { pickup, destination },
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('user-token')}`
-            } 
-        });
-        const data = await response.data;
-        setFare(data);
-        setVehiclePanel(true);
-        setPanelOpen(false);
+        try {
+            const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/rides/get-fare`, {
+                params: { pickup, destination },
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('user-token')}`
+                } 
+            });
+            const data = await response.data;
+            setFare(data);
+            setVehiclePanel(true);
+            setPanelOpen(false);
+        } catch (error) {
+            console.error('Error fetching fare:', error);
+            if (error.response) {
+                const errorMessage = error.response.data.message || 'Failed to calculate fare';
+                toast.error(errorMessage);
+            } else {
+                toast.error('Failed to calculate fare. Please try again.');
+            }
+        }
     }
 
   return (

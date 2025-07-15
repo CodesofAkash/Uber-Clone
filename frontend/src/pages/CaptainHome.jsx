@@ -9,6 +9,7 @@ import ConfirmRidePopup from '../components/ConfirmRidePopup'
 import { SocketContext } from '../context/SocketContext'
 import { CaptainDataContext } from '../context/CaptainContext'
 import axios from 'axios'
+import toast from 'react-hot-toast'
 import LiveTracking from '../components/LiveTracking'
 
 const CaptainHome = () => {
@@ -45,27 +46,42 @@ const CaptainHome = () => {
       const locationInterval = setInterval(() => {updateLocation()}, 1000);
       updateLocation();
 
-      // return () => clearInterval(locationInterval);
       socket.on('new-ride', (data) => {
         setRide(data);
         setRidePopup(true);
       })
 
+      return () => {
+        clearInterval(locationInterval);
+        socket.off('new-ride');
+      };
+
     }, [captain._id, socket]);
     
 
     async function acceptRide() {
-      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/rides/accept`, {
-        rideId: ride._id
-      }, {
-        headers: {
-            Authorization: `Bearer ${localStorage.getItem('captain-token')}`
+      try {
+        const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/rides/accept`, {
+          rideId: ride._id
+        }, {
+          headers: {
+              Authorization: `Bearer ${localStorage.getItem('captain-token')}`
+          }
+        });
+        setRide(response.data);
+        setConfirmRidePopup(true);
+        setRidePopup(false);
+        toast.success('Ride accepted successfully!');
+      } catch (error) {
+        console.error('Error accepting ride:', error);
+        if (error.response) {
+          const errorMessage = error.response.data.message || 'Failed to accept ride';
+          toast.error(errorMessage);
+        } else {
+          toast.error('Failed to accept ride. Please try again.');
         }
-      });
-      setRide(response.data);
-      setConfirmRidePopup(true);
-      setRidePopup(false);
       }
+    }
 
     async function ignoreRide() {
         setRidePopup(false);
@@ -73,28 +89,50 @@ const CaptainHome = () => {
     }
 
     async function confirmRide(otp) {
-      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/rides/confirm`, {
-        rideId: ride._id,
-        otp
+      try {
+        const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/rides/confirm`, {
+          rideId: ride._id,
+          otp
+        }, {
+          headers: {
+              Authorization: `Bearer ${localStorage.getItem('captain-token')}`
+          }
+        });
+        setRide(response.data);
+        toast.success('Ride confirmed and started!');
+        navigate('/captain/riding', { state : { ride } });
+      } catch (error) {
+        console.error('Error confirming ride:', error);
+        if (error.response) {
+          const errorMessage = error.response.data.message || 'Failed to confirm ride';
+          toast.error(errorMessage);
+        } else {
+          toast.error('Failed to confirm ride. Please try again.');
+        }
+      }
+    }
+
+  async function cancelRide() {
+    try {
+      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/rides/cancel`, {
+        rideId: ride._id
       }, {
         headers: {
             Authorization: `Bearer ${localStorage.getItem('captain-token')}`
         }
       });
       setRide(response.data);
-      navigate('/captain/riding', { state : { ride } });
-  }
-
-  async function cancelRide() {
-    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/rides/cancel`, {
-      rideId: ride._id
-    }, {
-      headers: {
-          Authorization: `Bearer ${localStorage.getItem('captain-token')}`
+      setConfirmRidePopup(false);
+      toast.success('Ride cancelled successfully');
+    } catch (error) {
+      console.error('Error cancelling ride:', error);
+      if (error.response) {
+        const errorMessage = error.response.data.message || 'Failed to cancel ride';
+        toast.error(errorMessage);
+      } else {
+        toast.error('Failed to cancel ride. Please try again.');
       }
-    });
-    setRide(response.data);
-    setConfirmRidePopup(false);
+    }
   }
 
 

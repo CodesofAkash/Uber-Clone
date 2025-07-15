@@ -2,30 +2,52 @@ import React, { useContext, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { CaptainDataContext } from '../context/CaptainContext'
+import toast from 'react-hot-toast'
 
 const CaptainLogin = () => {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
-  const { captain, setCaptain } = useContext(CaptainDataContext);
+  const { setCaptain } = useContext(CaptainDataContext);
   const navigate = useNavigate();
 
   const submitHandler = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     
-    const captainCredentials = {email: email, password: password};    
-    
-    const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/captains/login`, captainCredentials);
-    if(res.status === 200) {
-      const data = res.data;
-      setCaptain(data.captain);
-      localStorage.setItem('captain-token', data.token);
-      navigate('/captain/home');
+    try {
+      const captainCredentials = {email: email, password: password};    
+      
+      const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/captains/login`, captainCredentials);
+      if(res.status === 200) {
+        const data = res.data;
+        setCaptain(data.captain);
+        localStorage.setItem('captain-token', data.token);
+        toast.success('Login successful!');
+        navigate('/captain/home');
+      }
+    } catch (error) {
+      console.error('Captain login error:', error);
+      if (error.response) {
+        // Server responded with error status
+        const errorMessage = error.response.data.message || 
+                             (error.response.data.errors && error.response.data.errors[0]?.msg) || 
+                             'Login failed';
+        toast.error(errorMessage);
+      } else if (error.request) {
+        // Network error
+        toast.error('Network error. Please check your connection.');
+      } else {
+        // Other error
+        toast.error('An unexpected error occurred. Please try again.');
+      }
+    } finally {
+      setIsLoading(false);
+      setEmail('');
+      setPassword('');
     }
-
-    setEmail('');
-    setPassword('');
   }
 
   return (
@@ -58,8 +80,10 @@ const CaptainLogin = () => {
           placeholder="password" />
 
           <button
-          className='bg-[#111] text-white font-semibold mb-3 rounded px-4 py-2 w-full text-lg placeholder:text-base'
-          >LogIn</button>
+          type="submit"
+          disabled={isLoading}
+          className={`${isLoading ? 'bg-gray-500 cursor-not-allowed' : 'bg-[#111] hover:bg-gray-800'} text-white font-semibold mb-3 rounded px-4 py-2 w-full text-lg placeholder:text-base transition-colors`}
+          >{isLoading ? 'Logging in...' : 'LogIn'}</button>
           <p className='text-center'>Join a fleet? <Link to='/captain/signup' className='text-blue-600 hover:underline'>Register as a Captain</Link>
           </p>
         </form>

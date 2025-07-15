@@ -19,5 +19,6 @@ module.exports.createUser = async ({firstName, lastName, email, password}) => {
 
     } catch (error) {
         console.log('Error while creating user', error.message);
+        throw error; // Re-throw the error so it can be handled by the controller
     }
 }
