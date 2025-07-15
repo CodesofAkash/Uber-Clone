@@ -1,11 +1,6 @@
 [build]
 builder = "nixpacks"
 
-[build.nixpacks]
-cmds = ["npm install", "npm start"]
-
 [deploy]
 startCommand = "npm start"
-
-# Set the working directory to Backend
 workingDirectory = "Backend"
