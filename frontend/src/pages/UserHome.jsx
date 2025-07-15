@@ -4,6 +4,7 @@ import gsap from 'gsap'
 import { Link } from 'react-router-dom'
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 import LocationSearchPanel from '../components/LocationSearchPanel'
 import VehiclePanel from '../components/VehiclePanel'
@@ -87,6 +88,7 @@ const UserHome = () => {
       }
     } catch(error) {
       console.error('Error fetching pickup suggestions:', error);
+      toast.error('Failed to fetch pickup suggestions');
     }
   }
 
@@ -104,6 +106,7 @@ const UserHome = () => {
       }
     } catch(error) {
       console.error('Error fetching destination suggestions:', error);
+      toast.error('Failed to fetch destination suggestions');
     }
   }
 
@@ -112,17 +115,28 @@ const UserHome = () => {
   }
 
   async function createRide(vehicleType) {
-    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/rides/create`, {
-      pickup,
-      destination,
-      vehicleType
-    }, {
-      headers : {
-        Authorization: `Bearer ${localStorage.getItem('user-token')}`
+    try {
+      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/rides/create`, {
+        pickup,
+        destination,
+        vehicleType
+      }, {
+        headers : {
+          Authorization: `Bearer ${localStorage.getItem('user-token')}`
+        }
+      });
+      setRide(response.data.ride);
+      return response.data.ride;
+    } catch (error) {
+      console.error('Error creating ride:', error);
+      if (error.response) {
+        const errorMessage = error.response.data.message || 'Failed to create ride';
+        toast.error(errorMessage);
+      } else {
+        toast.error('Failed to create ride. Please try again.');
       }
-    });
-    setRide(response.data.ride);
-    return response.data.ride;
+      throw error;
+    }
   }
 
   useGSAP(()=>{

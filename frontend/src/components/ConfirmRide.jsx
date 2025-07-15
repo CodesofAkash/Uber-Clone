@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import toast from 'react-hot-toast'
 
 const ConfirmRide = (props) => {
 
@@ -57,9 +58,11 @@ const ConfirmRide = (props) => {
             if (rideCreated) {
               props.setVehicleFound(true);
               props.setConfirmRide(false);
+              toast.success('Ride created successfully! Looking for a driver...');
             }
           } catch (error) {
             console.error('Failed to create ride:', error);
+            toast.error('Failed to create ride. Please try again.');
           }
         }} className='w-full mt-5 bg-green-600 text-white font-semibold p-2 rounded-xl active:scale-95 transition-transform duration-150 ease-in-out'>Confirm</button>
       </div>

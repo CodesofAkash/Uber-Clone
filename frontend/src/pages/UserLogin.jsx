@@ -2,29 +2,50 @@ import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { UserDataContext } from '../context/UserContext'
+import toast from 'react-hot-toast'
 
 const UserLogin = () => {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
-  const {user, setUser} = React.useContext(UserDataContext);
+  const {setUser} = React.useContext(UserDataContext);
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    const userCredentials = {email: email, password: password};
+    setIsLoading(true);
     
-    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/users/login`, userCredentials);
-    if(response.status === 201) {
-      const data = response.data;
-      setUser(data.user);
-      localStorage.setItem('user-token', data.token);
-      navigate('/user/home');
+    try {
+      const userCredentials = {email: email, password: password};
+      
+      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/users/login`, userCredentials);
+      if(response.status === 201) {
+        const data = response.data;
+        setUser(data.user);
+        localStorage.setItem('user-token', data.token);
+        toast.success('Login successful!');
+        navigate('/user/home');
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      if (error.response) {
+        // Server responded with error status
+        const errorMessage = error.response.data.message || 'Login failed';
+        toast.error(errorMessage);
+      } else if (error.request) {
+        // Network error
+        toast.error('Network error. Please check your connection.');
+      } else {
+        // Other error
+        toast.error('An unexpected error occurred. Please try again.');
+      }
+    } finally {
+      setIsLoading(false);
+      setEmail('');
+      setPassword('');
     }
-
-    setEmail('');
-    setPassword('');
   }
   
   return (
@@ -57,8 +78,10 @@ const UserLogin = () => {
           placeholder="password" />
 
           <button
-          className='bg-[#111] text-white font-semibold mb-3 rounded px-4 py-2 w-full text-lg placeholder:text-base'
-          >LogIn</button>
+          type="submit"
+          disabled={isLoading}
+          className={`${isLoading ? 'bg-gray-500 cursor-not-allowed' : 'bg-[#111] hover:bg-gray-800'} text-white font-semibold mb-3 rounded px-4 py-2 w-full text-lg placeholder:text-base transition-colors`}
+          >{isLoading ? 'Logging in...' : 'LogIn'}</button>
           <p className='text-center'>New here? <Link to='/signup' className='text-blue-600 hover:underline'>Create new Account</Link>
           </p>
         </form>

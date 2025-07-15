@@ -1,5 +1,6 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { Route, Routes } from 'react-router-dom'
+import { Toaster } from 'react-hot-toast'
 
 import Start from './pages/Start'
 
@@ -21,6 +22,17 @@ const App = () => {
 
   return (
     <div>
+      <Toaster 
+        position="top-center"
+        reverseOrder={false}
+        toastOptions={{
+          duration: 4000,
+          style: {
+            background: '#363636',
+            color: '#fff',
+          },
+        }}
+      />
       <Routes>
         <Route path='/' element={<Start />} />
 

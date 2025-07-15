@@ -2,11 +2,12 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { CaptainDataContext } from '../context/CaptainContext';
+import toast from 'react-hot-toast';
 
 const CaptainProtectedWrapper = ({ children }) => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
-  const { captain, setCaptain } = useContext(CaptainDataContext);
+  const { setCaptain } = useContext(CaptainDataContext);
   const token = localStorage.getItem('captain-token');
 
   useEffect(() => {
@@ -29,6 +30,7 @@ const CaptainProtectedWrapper = ({ children }) => {
       } catch (err) {
         console.error('Error fetching captain profile:', err);
         localStorage.removeItem('captain-token');
+        toast.error('Session expired. Please log in again.');
         navigate('/captain/login');
       }
     };
