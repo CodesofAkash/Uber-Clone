@@ -2,6 +2,8 @@ import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
 
+import Layout from './components/Layout'
+
 import Start from './pages/Start'
 
 import UserSignup from './pages/UserSignup'
@@ -21,7 +23,7 @@ import CaptainProtectedWrapper from './pages//CaptainProtectedWrapper'
 const App = () => {
 
   return (
-    <div>
+    <Layout>
       <Toaster 
         position="top-center"
         reverseOrder={false}
@@ -73,7 +75,7 @@ const App = () => {
         } />
 
       </Routes>
-    </div>
+    </Layout>
   )
 }
 
