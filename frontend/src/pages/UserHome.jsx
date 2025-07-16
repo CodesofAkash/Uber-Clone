@@ -248,24 +248,24 @@ const UserHome = () => {
   }, [driverFound])
 
   return (
-    <div className='h-screen-dynamic mobile-safe'>
-      <Link to={'/'}><img ref={homeRef} className='w-28 absolute-safe left-1 top-1 z-10' src="/uber.png" alt="uber" /></Link>
-      <Link to='/login' className='bg-white h-fit w-fit p-2 rounded-xl flex justify-center items-center absolute-safe z-10 top-5 right-3'>
+    <div className='h-screen relative overflow-hidden'>
+      <Link to={'/'}><img ref={homeRef} className='w-28 absolute left-1 top-1 z-10' src="/uber.png" alt="uber" /></Link>
+      <Link to='/login' className='bg-white h-fit w-fit p-2 rounded-xl flex justify-center items-center absolute z-10 top-5 right-3'>
         <img ref={logoutRef} className='w-7' src="/logout.png" alt="uber" />
       </Link>
 
-      <div onClick={()=>setVehiclePanel(false)} className='h-screen-dynamic w-screen'>
+      <div onClick={()=>setVehiclePanel(false)} className='h-screen w-screen'>
         <LiveTracking />
       </div>
 
-      <div className='h-screen-dynamic w-full flex flex-col justify-end absolute-safe top-0'>
+      <div className='h-screen w-full flex flex-col justify-end absolute top-0'>
         <div className='relative h-[30%] bg-white p-6'>
-          <img ref={panelCloseRef} onClick={()=>setPanelOpen(false)} src="/down.png" className='opacity-0 h-8 w-8 absolute-safe top-1 left-1' alt="down" />
+          <img ref={panelCloseRef} onClick={()=>setPanelOpen(false)} src="/down.png" className='opacity-0 h-8 w-8 absolute top-1 left-1' alt="down" />
           <h4 className='text-2xl font-semibold mb-5'>Find a trip</h4>
           <form className='flex flex-col gap-4' onSubmit={(e)=>submitHandler(e)}>
-            <div className='round absolute-safe h-2 w-2 top-[46%] left-[11.1%] border-[2px] rounded-full'></div>
-            <div className='line absolute-safe h-12 w-[1px] border-2 top-[52%] left-11 bg-gray-900 rounded-full'></div>
-            <div className='box absolute-safe h-2 w-2 top-[78%] left-[11.2%] border-[2px]'></div>
+            <div className='round absolute h-2 w-2 top-[46%] left-[11.1%] border-[2px] rounded-full'></div>
+            <div className='line absolute h-12 w-[1px] border-2 top-[52%] left-11 bg-gray-900 rounded-full'></div>
+            <div className='box absolute h-2 w-2 top-[78%] left-[11.2%] border-[2px]'></div>
             <input value={pickup} onChange={(e)=>handlePickupChange(e)} onClick={()=> {setPanelOpen(true);setActiveField('pickup')}} className='bg-[#eee] rounded px-12 py-2 border-2 focus:border-[#d4b60f] focus:border-[3px] w-full text-lg placeholder:text-base outline-none'  type="text" name="pickup" placeholder='Add a pick-up location' />
             <input value={destination} onChange={(e)=>handleDestinationChange(e)} onClick={()=> {setPanelOpen(true);setActiveField('destination')}} className='bg-[#eee] rounded px-12 py-2 border-2 focus:border-[#d4b60f] focus:border-[3px] w-full text-lg placeholder:text-base outline-none'  type="text" name="destination" placeholder='Enter a destination' />
           </form>
