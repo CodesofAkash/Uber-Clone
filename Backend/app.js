@@ -32,6 +32,17 @@ app.get('/', (req, res) => {
     res.send("Hello World!");
 })
 
+// Add a test route to check if routes are working
+app.get('/test', (req, res) => {
+    res.json({ message: 'Test route working' });
+});
+
+// Debug middleware to log all requests
+app.use((req, res, next) => {
+    console.log(`${req.method} ${req.path} - Route not found`);
+    res.status(404).json({ message: 'Route not found' });
+});
+
 // Global error handler
 app.use((err, req, res, next) => {
     console.error('Global error handler:', err);

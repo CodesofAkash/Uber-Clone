@@ -81,7 +81,7 @@ module.exports.getUserProfile = async (req, res, next) => {
 module.exports.logoutUser = async (req, res, next) => {
     try {
         res.clearCookie('token');
-        const token = req.cookies?.token || req.header.authorization?.split(' ')[1];
+        const token = req.cookies?.token || req.headers.authorization?.split(' ')[1];
         if(!token) {
             return res.status(401).json({message: 'User not logged in'});
         }
