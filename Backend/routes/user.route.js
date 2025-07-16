@@ -9,6 +9,11 @@ console.log('User routes file loaded');
 console.log('User controller:', typeof userController);
 console.log('Available controller functions:', Object.keys(userController));
 
+// Test route to verify user routes are working
+router.get('/test', (req, res) => {
+    res.json({ message: 'User routes are working!', routes: ['POST /register', 'POST /login', 'GET /profile', 'GET /logout'] });
+});
+
 router.post('/register', [
     body('email').trim().isEmail().withMessage('Please enter a valid email'),
     body('fullName.firstName').trim().isLength({min: 3}).withMessage('First name must be at least 3 characters long'),
