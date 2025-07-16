@@ -23,7 +23,6 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.11.0",
     "nodemon": "^3.1.9",
-    "socket.io": "^4.8.1",
-    "@react-google-maps/api": "^2.20.6"
+    "socket.io": "^4.8.1"
   }
 }
