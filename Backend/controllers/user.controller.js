@@ -3,7 +3,11 @@ const {validationResult} = require('express-validator');
 const userModel = require('../models/user.model');
 const blacklistTokenModel = require('../models/blacklistToken.model');
 
+// Debug: Log controller loading
+console.log('User controller loaded successfully');
+
 module.exports.registerUser = async (req, res, next) => {
+    console.log('registerUser called');
     try {
         const errors = validationResult(req);
         if(!errors.isEmpty()) {
@@ -37,6 +41,7 @@ module.exports.registerUser = async (req, res, next) => {
 }
 
 module.exports.loginUser = async (req, res, next) => {
+    console.log('loginUser called');
     try {
         const errors = validationResult(req);
         if(!errors.isEmpty()) {

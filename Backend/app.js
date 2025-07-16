@@ -11,6 +11,13 @@ const captainRoutes = require('./routes/captain.route');
 const mapRoutes = require('./routes/maps.routes');
 const rideRoutes = require('./routes/ride.routes');
 
+// Debug: Log route loading
+console.log('Loading routes...');
+console.log('User routes loaded:', typeof userRoutes);
+console.log('Captain routes loaded:', typeof captainRoutes);
+console.log('Map routes loaded:', typeof mapRoutes);
+console.log('Ride routes loaded:', typeof rideRoutes);
+
 
 connectToDb();
 
@@ -27,6 +34,11 @@ app.use('/users', userRoutes);
 app.use('/captains', captainRoutes);
 app.use('/maps', mapRoutes);
 app.use('/rides', rideRoutes);
+
+// Debug: Log route registration
+console.log('Routes registered successfully');
+console.log('User routes registered at /users');
+console.log('Available routes: /, /test, /users/*, /captains/*, /maps/*, /rides/*');
 
 app.get('/', (req, res) => {
     res.send("Hello World!");
